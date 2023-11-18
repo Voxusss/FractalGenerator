@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers sources\imgui">
+      <UniqueIdentifier>{5ecb2fc6-8013-4abb-99e6-a67a6026a9a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\imgui">
+      <UniqueIdentifier>{9b575eab-db79-4698-aebb-335c55827fc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -20,6 +26,27 @@
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_widgets.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_tables.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_draw.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_demo.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_impl_opengl3.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_impl_glfw.cpp">
+      <Filter>Fichiers sources\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -29,6 +56,33 @@
   <ItemGroup>
     <ClInclude Include="Shader.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imgui_impl_glfw.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imstb_truetype.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imstb_textedit.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imstb_rectpack.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imgui_internal.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imgui.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imconfig.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imgui_impl_opengl3.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imgui_impl_opengl3_loader.h">
+      <Filter>Fichiers d%27en-tête\imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

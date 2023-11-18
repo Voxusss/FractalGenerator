@@ -1,3 +1,6 @@
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 #include <iostream>
 #include <stdlib.h>
 #include <string>
@@ -21,6 +24,8 @@ float last_time{};
 float center_x{ 0.0f };
 float center_y{ 0.0f };
 float zoom{ 1.0 };
+float julia_real{ 0.355 };
+float julia_imag{ 0.355 };
 
 float vertices[] =
 {
@@ -141,7 +146,9 @@ int main()
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_SAMPLES, 16);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glEnable(GL_MULTISAMPLE);
 
     GLFWwindow* window = glfwCreateWindow(screen_width, screen_height, "Mandelbrot", NULL, NULL);
 
@@ -162,7 +169,7 @@ int main()
     glViewport(0, 0, screen_width, screen_height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    Shader our_shader("Shader.vert", "Shader.frag");
+    Shader our_shader("shader.vert", "shader.frag");
 
     unsigned int VAO, VBO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -190,10 +197,22 @@ int main()
     std::vector<float> pixel_data(screen_width * screen_height, 0.0f);
     glm::vec4 ranges = glm::vec4(0.0001f, 0.33333f, 0.66667f, 1.00f);
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark;
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
     while (!glfwWindowShouldClose(window))
     {
+        glfwMakeContextCurrent(window);
         glClearColor(0.2f, 0.0f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
         process_input(window);
         countFPS();
@@ -203,10 +222,55 @@ int main()
         our_shader.set_float("center_x", center_x);
         our_shader.set_float("center_y", center_y);
         our_shader.set_vec4("color_ranges", ranges);
+        our_shader.set_float("julia_real", julia_real);
+        our_shader.set_float("julia_imag", julia_imag);
 
         glBindVertexArray(VAO);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        // Create a window in ImGui for controls
+        ImGui::Begin("Controls");
+
+        // Add example control
+        if (ImGui::Button("Zoom In")) {
+            zoom = zoom * 0.96f;
+            if (zoom < 0.00001f)
+            {
+                zoom = 0.00001f;
+            }
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Zoom Out")) {
+            zoom = zoom * 1.04f;
+            if (zoom > 1.0f)
+            {
+                zoom = 1.0f;
+            }
+        }
+        if (ImGui::Button("-##Real")) {
+            julia_real -= 0.001f;
+        }
+        ImGui::SameLine();
+        ImGui::Text("Real");
+        ImGui::SameLine();
+        if (ImGui::Button("+##Real")) {
+            julia_real += 0.001f;
+        }
+        if (ImGui::Button("-##Imag")) {
+            julia_imag -= 0.001f;
+        }
+        ImGui::SameLine();
+        ImGui::Text("Imaginary");
+        ImGui::SameLine();
+        if (ImGui::Button("+##Imag")) {
+            julia_imag += 0.001f;
+        }
+
+        ImGui::End();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
         glfwPollEvents();

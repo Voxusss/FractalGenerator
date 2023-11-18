@@ -19,6 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_demo.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_draw.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_tables.cpp" />
+    <ClCompile Include="..\..\..\..\Documents\imguiadd\imgui_widgets.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
@@ -27,6 +34,15 @@
     <None Include="Shader.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imconfig.h" />
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imgui.h" />
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imgui_impl_glfw.h" />
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imgui_internal.h" />
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imstb_rectpack.h" />
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imstb_textedit.h" />
+    <ClInclude Include="..\..\..\..\Documents\imguiadd\imstb_truetype.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -115,7 +131,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\antoi\Documents\glm\;C:\Users\antoi\Documents\glew-2.1.0\include;C:\Users\antoi\Documents\glfw-3.3.8.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\antoi\Documents\imguiadd;C:\Users\antoi\Documents\glm\;C:\Users\antoi\Documents\glew-2.1.0\include;C:\Users\antoi\Documents\glfw-3.3.8.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +148,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\antoi\Documents\glm\;C:\Users\antoi\Documents\glew-2.1.0\include;C:\Users\antoi\Documents\glfw-3.3.8.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\antoi\Documents\imguiadd;C:\Users\antoi\Documents\glm\;C:\Users\antoi\Documents\glew-2.1.0\include;C:\Users\antoi\Documents\glfw-3.3.8.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
