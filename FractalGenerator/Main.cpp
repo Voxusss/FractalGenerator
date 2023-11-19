@@ -26,6 +26,7 @@ float center_y{ 0.0f };
 float zoom{ 1.0 };
 float julia_real{ 0.355 };
 float julia_imag{ 0.355 };
+float fractalType{ 0.0 };
 
 float vertices[] =
 {
@@ -224,6 +225,7 @@ int main()
         our_shader.set_vec4("color_ranges", ranges);
         our_shader.set_float("julia_real", julia_real);
         our_shader.set_float("julia_imag", julia_imag);
+        our_shader.set_float("fractalType", fractalType);
 
         glBindVertexArray(VAO);
 
@@ -248,25 +250,42 @@ int main()
                 zoom = 1.0f;
             }
         }
-        if (ImGui::Button("-##Real")) {
-            julia_real -= 0.001f;
+        if (ImGui::Button("Reset")) {
+            zoom = 1.0;
+            center_x = 0.0;
+            center_y = 0.0;
         }
-        ImGui::SameLine();
-        ImGui::Text("Real");
-        ImGui::SameLine();
-        if (ImGui::Button("+##Real")) {
-            julia_real += 0.001f;
-        }
-        if (ImGui::Button("-##Imag")) {
-            julia_imag -= 0.001f;
-        }
-        ImGui::SameLine();
-        ImGui::Text("Imaginary");
-        ImGui::SameLine();
-        if (ImGui::Button("+##Imag")) {
-            julia_imag += 0.001f;
+        if (fractalType == 1) {
+            if (ImGui::Button("-##Real")) {
+                julia_real -= 0.001f;
+            }
+            ImGui::SameLine();
+            ImGui::Text("Real");
+            ImGui::SameLine();
+            if (ImGui::Button("+##Real")) {
+                julia_real += 0.001f;
+            }
+            if (ImGui::Button("-##Imag")) {
+                julia_imag -= 0.001f;
+            }
+            ImGui::SameLine();
+            ImGui::Text("Imaginary");
+            ImGui::SameLine();
+            if (ImGui::Button("+##Imag")) {
+                julia_imag += 0.001f;
+            }
         }
 
+        ImGui::End();
+        ImGui::Begin("Type");
+        if (ImGui::Button("Mandelbrot")) {
+            std::cout << fractalType;
+            fractalType = 0.0;
+        }
+        if (ImGui::Button("Julia")) {
+            std::cout << fractalType;
+            fractalType = 1.0;
+        }
         ImGui::End();
 
         ImGui::Render();

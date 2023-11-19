@@ -10,10 +10,11 @@ uniform float julia_real;
 uniform float julia_imag;
 uniform float zoom;
 uniform vec4 color_ranges;
+uniform float fractalType;
  
 #define MAX_ITERATIONS 600
  
-int get_iterations()
+int get_iterations_julia()
 {
     float real = ((gl_FragCoord.x / 1080.0f - 0.5f) * zoom + center_x) * 4.0f;
     float imag = ((gl_FragCoord.y / 1080.0f - 0.5f) * zoom + center_y) * 4.0f;
@@ -36,11 +37,43 @@ int get_iterations()
     return iterations;
 }
 
+int get_iterations_mandelbrot()
+{
+    float real = ((gl_FragCoord.x / 1080.0f - 0.5f) * zoom + center_x) * 4.0f;
+    float imag = ((gl_FragCoord.y / 1080.0f - 0.5f) * zoom + center_y) * 4.0f;
  
+    int iterations = 0;
+    float const_real = real;
+    float const_imag = imag;
+ 
+    while (iterations < MAX_ITERATIONS)
+    {
+        float tmp_real = real;
+        real = (real * real - imag * imag) + const_real;
+        imag = (2.0 * tmp_real * imag) + const_imag;
+         
+        float dist = real * real + imag * imag;
+ 
+        if (dist > 4.0)
+            break;
+ 
+        ++iterations;
+    }
+    return iterations;
+}
+
  
 vec4 return_color()
 {
-    int iter = get_iterations();
+    int iter = 0;  // Declare iter outside the if blocks
+
+    if (fractalType == 0.0f){
+        iter = get_iterations_mandelbrot();
+    }
+    else if (fractalType == 1.0f){
+        iter = get_iterations_julia();
+    }
+
     if (iter == MAX_ITERATIONS)
     {
         gl_FragDepth = 0.0f;
