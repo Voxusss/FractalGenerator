@@ -19,6 +19,11 @@
 int screen_width{ 1080 };
 int screen_height{ 1080 };
 
+glm::vec4 color_0{glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)};
+glm::vec4 color_1{glm::vec4(0.0f, 0.2f, 0.5f, 1.0f)};
+glm::vec4 color_2{glm::vec4(1.0f, 0.8f, 0.1f, 1.0f)};
+glm::vec4 color_3{glm::vec4(1.0f, 0.0f, 0.4f, 1.0f)};
+
 int num_frames{};
 float last_time{};
 float center_x{ 0.0f };
@@ -27,6 +32,13 @@ float zoom{ 1.0 };
 float julia_real{ 0.355 };
 float julia_imag{ 0.355 };
 float fractalType{ 0.0 };
+
+float sierpinski_xFactor{ 4.0 };
+float sierpinski_yFactor{ 4.0 };
+float sierpinski_xLower{ 0.3333 };
+float sierpinski_xUpper{ 0.6666 };
+float sierpinski_yLower{ 0.3333 };
+float sierpinski_yUpper{ 0.6666 };
 
 float vertices[] =
 {
@@ -108,9 +120,9 @@ void process_input(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
     {
         zoom = zoom * 0.96f;
-        if (zoom < 0.00001f)
+        if (zoom < 0.00000001f)
         {
-            zoom = 0.00001f;
+            zoom = 0.00000001f;
         }
     }
 }
@@ -219,6 +231,10 @@ int main()
         countFPS();
 
         our_shader.use_shader();
+        our_shader.set_vec4("color_0", color_0);
+        our_shader.set_vec4("color_1", color_1);
+        our_shader.set_vec4("color_2", color_2);
+        our_shader.set_vec4("color_3", color_3);
         our_shader.set_float("zoom", zoom);
         our_shader.set_float("center_x", center_x);
         our_shader.set_float("center_y", center_y);
@@ -226,6 +242,13 @@ int main()
         our_shader.set_float("julia_real", julia_real);
         our_shader.set_float("julia_imag", julia_imag);
         our_shader.set_float("fractalType", fractalType);
+        
+        our_shader.set_float("sierpinski_xFactor", sierpinski_xFactor);
+        our_shader.set_float("sierpinski_yFactor", sierpinski_yFactor);
+        our_shader.set_float("sierpinski_xLower", sierpinski_xLower);
+        our_shader.set_float("sierpinski_xUpper", sierpinski_xUpper);
+        our_shader.set_float("sierpinski_yLower", sierpinski_yLower);
+        our_shader.set_float("sierpinski_yUpper", sierpinski_yUpper);
 
         glBindVertexArray(VAO);
 
@@ -275,6 +298,80 @@ int main()
                 julia_imag += 0.001f;
             }
         }
+        if (fractalType == 2) {
+            if (ImGui::Button("-##xFactor")) {
+                sierpinski_xFactor -= 1;
+            }
+            ImGui::SameLine();
+            ImGui::Text("X Factor");
+            ImGui::SameLine();
+            if (ImGui::Button("+##xFactor")) {
+                sierpinski_xFactor += 1;
+            }
+            ImGui::SameLine();
+            ImGui::Text(std::to_string(sierpinski_xFactor).c_str());
+
+            if (ImGui::Button("-##yFactor")) {
+                std::cout << sierpinski_yFactor;
+                sierpinski_yFactor -= 1;
+            }
+            ImGui::SameLine();
+            ImGui::Text("Y Factor");
+            ImGui::SameLine();
+            if (ImGui::Button("+##yFactor")) {
+                sierpinski_yFactor += 1;
+            }
+            ImGui::SameLine();
+            ImGui::Text(std::to_string(sierpinski_yFactor).c_str());
+
+            if (ImGui::Button("-##yLower")) {
+                sierpinski_yLower -= 0.01f;
+            }
+            ImGui::SameLine();
+            ImGui::Text("Y Lower");
+            ImGui::SameLine();
+            if (ImGui::Button("+##yLower")) {
+                sierpinski_yLower += 0.01f;
+            }
+            ImGui::SameLine();
+            ImGui::Text(std::to_string(sierpinski_yLower).c_str());
+
+            if (ImGui::Button("-##yUpper")) {
+                sierpinski_yUpper -= 0.01f;
+            }
+            ImGui::SameLine();
+            ImGui::Text("Y Upper");
+            ImGui::SameLine();
+            if (ImGui::Button("+##yUpper")) {
+                sierpinski_yUpper += 0.01f;
+            }
+            ImGui::SameLine();
+            ImGui::Text(std::to_string(sierpinski_yUpper).c_str());
+
+            if (ImGui::Button("-##xLower")) {
+                sierpinski_xLower -= 0.01f;
+            }
+            ImGui::SameLine();
+            ImGui::Text("X Lower");
+            ImGui::SameLine();
+            if (ImGui::Button("+##xLower")) {
+                sierpinski_xLower += 0.01f;
+            }
+            ImGui::SameLine();
+            ImGui::Text(std::to_string(sierpinski_xLower).c_str());
+
+            if (ImGui::Button("-##xUpper")) {
+                sierpinski_xUpper -= 0.01f;
+            }
+            ImGui::SameLine();
+            ImGui::Text("X Upper");
+            ImGui::SameLine();
+            if (ImGui::Button("+##xUpper")) {
+                sierpinski_xUpper += 0.01f;
+            }
+            ImGui::SameLine();
+            ImGui::Text(std::to_string(sierpinski_xUpper).c_str());
+        }
 
         ImGui::End();
         ImGui::Begin("Type");
@@ -286,6 +383,29 @@ int main()
             std::cout << fractalType;
             fractalType = 1.0;
         }
+        if (ImGui::Button("Sierpinski Carpet")) {
+            std::cout << fractalType;
+            fractalType = 2.0;
+        }
+        ImGui::End();
+        ImGui::Begin("Colors");
+
+        float outputColor0[4];
+        ImGui::ColorEdit4("Color 0", outputColor0);
+        color_0 = glm::vec4(outputColor0[0], outputColor0[1], outputColor0[2], outputColor0[3]);
+
+        float outputColor1[4];
+        ImGui::ColorEdit4("Color 1", outputColor1);
+        color_1 = glm::vec4(outputColor1[0], outputColor1[1], outputColor1[2], outputColor1[3]);
+
+        float outputColor2[4];
+        ImGui::ColorEdit4("Color 2", outputColor2);
+        color_2 = glm::vec4(outputColor2[0], outputColor2[1], outputColor2[2], outputColor2[3]);
+
+        float outputColor3[4];
+        ImGui::ColorEdit4("Color 3", outputColor3);
+        color_3 = glm::vec4(outputColor3[0], outputColor3[1], outputColor3[2], outputColor3[3]);
+
         ImGui::End();
 
         ImGui::Render();
