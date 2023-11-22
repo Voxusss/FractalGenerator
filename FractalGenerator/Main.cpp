@@ -390,21 +390,24 @@ int main()
         ImGui::End();
         ImGui::Begin("Colors");
 
-        float outputColor0[4];
-        ImGui::ColorEdit4("Color 0", outputColor0);
-        color_0 = glm::vec4(outputColor0[0], outputColor0[1], outputColor0[2], outputColor0[3]);
+        float outputColor0[4] = { color_0[0], color_0[1], color_0[2], color_0[3] };
+        float defaultColor = outputColor0[0];
+        ImGui::ColorEdit3("Color 0", outputColor0);
+        color_0 = glm::vec4(outputColor0[0], outputColor0[1], outputColor0[2], 255);
 
-        float outputColor1[4];
-        ImGui::ColorEdit4("Color 1", outputColor1);
-        color_1 = glm::vec4(outputColor1[0], outputColor1[1], outputColor1[2], outputColor1[3]);
+        float outputColor1[4] = { color_1[0], color_1[1], color_1[2], color_1[3] };
+        ImGui::ColorEdit3("Color 1", outputColor1);
+        color_1 = glm::vec4(outputColor1[0], outputColor1[1], outputColor1[2], 255);
 
-        float outputColor2[4];
-        ImGui::ColorEdit4("Color 2", outputColor2);
-        color_2 = glm::vec4(outputColor2[0], outputColor2[1], outputColor2[2], outputColor2[3]);
+        float outputColor2[4] = { color_2[0], color_2[1], color_2[2], color_2[3] };
+        ImGui::ColorEdit3("Color 2", outputColor2);
+        color_2 = glm::vec4(outputColor2[0], outputColor2[1], outputColor2[2], 255);
 
-        float outputColor3[4];
-        ImGui::ColorEdit4("Color 3", outputColor3);
-        color_3 = glm::vec4(outputColor3[0], outputColor3[1], outputColor3[2], outputColor3[3]);
+        float outputColor3[4] = { color_3[0], color_3[1], color_3[2], color_3[3] };
+        ImGui::ColorEdit3("Color 3", outputColor3);
+        color_3 = glm::vec4(outputColor3[0], outputColor3[1], outputColor3[2], 255);
+        
+
 
         ImGui::End();
 
