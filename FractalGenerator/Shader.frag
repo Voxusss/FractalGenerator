@@ -109,6 +109,14 @@ vec4 sierpinski()
     return fragColor;
 }
 
+vec4 sierpinski_triangle(){
+    vec2 U = gl_FragCoord.xy;
+    vec2 fc = U*(pow(2.0,fract(linear_zoom)));
+    uvec2 p = uvec2(fc.x-fc.y*2.0/3.0,fc.y*4.0/3.0);
+    bool inside = (p.x&p.y)==0u&&p.x>0u;
+    return inside ? color_1 : color_0;
+}
+
  
 vec4 return_color()
 {
@@ -152,6 +160,8 @@ void main()
 {
     if(fractalType==2){
         fragColor = sierpinski();
+    }else if(fractalType==3){
+        fragColor = sierpinski_triangle();
     }else{
        fragColor = return_color(); 
     }

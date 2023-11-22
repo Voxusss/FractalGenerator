@@ -411,6 +411,10 @@ int main()
             std::cout << fractalType;
             fractalType = 2.0;
         }
+        if (ImGui::Button("Sierpinski Triangle")) {
+            std::cout << fractalType;
+            fractalType = 3.0;
+        }
         ImGui::End();
         ImGui::Begin("Colors");
 
