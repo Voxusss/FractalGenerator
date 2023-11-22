@@ -14,6 +14,7 @@ uniform float center_y;
 uniform float julia_real;
 uniform float julia_imag;
 uniform float zoom;
+uniform float linear_zoom;
 uniform vec4 color_ranges;
 uniform float fractalType;
 
@@ -74,24 +75,41 @@ int get_iterations_mandelbrot()
     return iterations;
 }
 
-int get_iterations_sierpinski()
+vec4 sierpinski()
 {
-    int iterations = 0;
-    float x = ((gl_FragCoord.x / 1080.0f - 0.5f) * zoom + center_x) * 4.0f;
-    float y = ((gl_FragCoord.y / 1080.0f - 0.5f) * zoom + center_y) * 4.0f;
+    vec2 fragCoord = gl_FragCoord.xy;
+    vec2 iResolution = vec2(1080.0f, 1080.0f);
+    vec2 pos = fragCoord - iResolution.xy / 2.0;
+    vec2 offset = vec2(-0.5);
+    
+    float col = 0.0;
+    float t = linear_zoom;
+    
+    float scale = pow(3.0, mod(t, 2.0) + 1.0);
+    float size = iResolution.y * scale;
+    float rot = 0;
 
-    while (iterations < MAX_ITERATIONS)
-    {
-        if (x > sierpinski_xLower && x < sierpinski_xUpper && y > sierpinski_yLower && y < sierpinski_yUpper)
+    pos = mat2(cos(-rot), sin(-rot), -sin(-rot), cos(-rot)) * pos;
+    pos += offset * iResolution.y * (scale * 0.5 - 0.5);
+
+    while(size > 1.0) {
+        size /= 3.0;
+        ivec2 ip = ivec2(round(pos / size));
+
+        if(ip.x == 0 && ip.y == 0) {
+            col = min(size*size, 1.0);
             break;
-
-        x = fract(x * sierpinski_xFactor);
-        y = fract(y * sierpinski_yFactor);
-
-        ++iterations;
+        } else {
+            pos -= vec2(ip) * size;
+        }
     }
 
-    return iterations;
+    if(col == 0.0) {
+        fragColor = color_0;
+    }else{
+        fragColor = color_1;
+    }
+    return fragColor;
 }
 
  
@@ -104,9 +122,6 @@ vec4 return_color()
     }
     else if (fractalType == 1.0f){
         iter = get_iterations_julia();
-    }
-    else if (fractalType == 2.0f){
-        iter = get_iterations_sierpinski();
     }
 
     if (iter == MAX_ITERATIONS)
@@ -138,5 +153,9 @@ vec4 return_color()
  
 void main()
 {
-    fragColor = return_color();
+    if(fractalType==2){
+        fragColor = sierpinski();
+    }else{
+       fragColor = return_color(); 
+    }
 }

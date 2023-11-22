@@ -29,6 +29,7 @@ float last_time{};
 float center_x{ 0.0f };
 float center_y{ 0.0f };
 float zoom{ 1.0 };
+float linear_zoom{ 1.0 };
 float julia_real{ 0.355 };
 float julia_imag{ 0.355 };
 float fractalType{ 0.0 };
@@ -111,6 +112,7 @@ void process_input(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
     {
         zoom = zoom * 1.04f;
+        linear_zoom = linear_zoom - 0.01f;
         if (zoom > 1.0f)
         {
             zoom = 1.0f;
@@ -120,6 +122,7 @@ void process_input(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
     {
         zoom = zoom * 0.96f;
+        linear_zoom = linear_zoom + 0.01f;
         if (zoom < 0.00000001f)
         {
             zoom = 0.00000001f;
@@ -141,16 +144,34 @@ void countFPS()
 
 glm::vec4 find_ranges(std::vector<float>& data)
 {
+    if (data.empty()) {
+        return glm::vec4(0.0f); // Return a zero vector if data is empty
+    }
+
     std::sort(data.begin(), data.end());
     int lowest = 0;
-    while (data[lowest] == 0.0f)
+    while (lowest < data.size() && data[lowest] == 0.0f)
     {
         ++lowest;
     }
 
     int size = data.size();
     int length = size - lowest;
-    glm::vec4 ranges = glm::vec4(data[lowest], data[lowest + length * 3 / 4 - 1], data[lowest + length * 7 / 8 - 1], data[size - 1]);
+    glm::vec4 ranges(0.0f);
+
+    if (lowest < size) {
+        ranges[0] = data[lowest];
+    }
+    if (lowest + length * 3 / 4 - 1 < size) {
+        ranges[1] = data[lowest + length * 3 / 4 - 1];
+    }
+    if (lowest + length * 7 / 8 - 1 < size) {
+        ranges[2] = data[lowest + length * 7 / 8 - 1];
+    }
+    if (size - 1 < size) {
+        ranges[3] = data[size - 1];
+    }
+
     return ranges;
 }
 
@@ -236,6 +257,7 @@ int main()
         our_shader.set_vec4("color_2", color_2);
         our_shader.set_vec4("color_3", color_3);
         our_shader.set_float("zoom", zoom);
+        our_shader.set_float("linear_zoom", linear_zoom);
         our_shader.set_float("center_x", center_x);
         our_shader.set_float("center_y", center_y);
         our_shader.set_vec4("color_ranges", ranges);
@@ -260,6 +282,7 @@ int main()
         // Add example control
         if (ImGui::Button("Zoom In")) {
             zoom = zoom * 0.96f;
+            linear_zoom = linear_zoom + 0.01f;
             if (zoom < 0.00001f)
             {
                 zoom = 0.00001f;
@@ -268,6 +291,7 @@ int main()
         ImGui::SameLine();
         if (ImGui::Button("Zoom Out")) {
             zoom = zoom * 1.04f;
+            linear_zoom = linear_zoom - 0.01f;
             if (zoom > 1.0f)
             {
                 zoom = 1.0f;
@@ -406,7 +430,7 @@ int main()
         float outputColor3[4] = { color_3[0], color_3[1], color_3[2], color_3[3] };
         ImGui::ColorEdit3("Color 3", outputColor3);
         color_3 = glm::vec4(outputColor3[0], outputColor3[1], outputColor3[2], 255);
-        
+
 
 
         ImGui::End();
@@ -416,9 +440,10 @@ int main()
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-
+        if (fractalType == 1 || fractalType == 0) {
         glReadPixels(0, 0, screen_width, screen_height, GL_DEPTH_COMPONENT, GL_FLOAT, pixel_data.data());
-        ranges = find_ranges(pixel_data);
+            ranges = find_ranges(pixel_data);
+        }
     }
 
     glDeleteVertexArrays(1, &VAO);
