@@ -87,9 +87,6 @@ vec4 sierpinski()
     
     float scale = pow(3.0, mod(t, 2.0) + 1.0);
     float size = iResolution.y * scale;
-    float rot = 0;
-
-    pos = mat2(cos(-rot), sin(-rot), -sin(-rot), cos(-rot)) * pos;
     pos += offset * iResolution.y * (scale * 0.5 - 0.5);
 
     while(size > 1.0) {
